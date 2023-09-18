@@ -1,38 +1,53 @@
+# syntax=docker/dockerfile:1.3-labs
 # Use a base image
-FROM ubuntu:20.04
+FROM cruizba/ubuntu-dind:focal-24.0.6
 
 # Install necessary packages
 RUN apt-get update && \
-    apt-get install -y wget && \
-    apt-get install -y gnupg2 && \
-    apt-get install -y software-properties-common && \
-    apt install supervisor
+    apt-get install -y wget gnupg2 software-properties-common supervisor make git sudo
 
-# Download the pre-built files from GitHub releases
-RUN wget https://github.com/ranchimall/blockbook/releases/download/flo-v0.4.0-ubuntu/backend-flo_0.15.1.1-satoshilabs-1_amd64.deb && \
-    wget https://github.com/ranchimall/blockbook/releases/download/flo-v0.4.0-ubuntu/blockbook-flo_0.4.0_amd64.deb
+# Mount the Docker socket from the host into the container
+# VOLUME /var/run/docker.sock:/var/run/docker.sock
 
-# Install the downloaded packages
-RUN apt install -y ./backend-flo_0.15.1.1-satoshilabs-1_amd64.deb && \
-    apt install -y ./blockbook-flo_0.4.0_amd64.deb
+# Build app (You can add your application build steps here)
+RUN git clone https://github.com/ranchimall/blockbook 
+WORKDIR /blockbook
+RUN --security=insecure cd /blockbook && make all-flo
 
-# Clean up downloaded packages
-RUN rm -f ./backend-flo_0.15.1.1-satoshilabs-1_amd64.deb && \
-    rm -f ./blockbook-flo_0.4.0_amd64.deb
+# Install deb files
+RUN sudo apt install -y ./build/backend-flo_0.15.1.1-satoshilabs-1_amd64.deb && \
+    sudo apt install -y ./build/blockbook-flo_0.4.0_amd64.deb
 
-# Setting up supervisor configurations
-#COPY backend-flo.conf /etc/supervisor/conf.d/
-#COPY blockbook-flo.conf /etc/supervisor/conf.d/
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-RUN touch /var/log/backend-flo-error.log && touch /var/log/backend-flo.log && touch /var/log/blockbook-flo-error.log && touch /var/log/blockbook-flo.log
-#RUN supervisorctl reread && supervisorctl update
+# Download deb files
+# RUN wget https://github.com/ranchimall/blockbook/releases/download/flo-v0.4.0-ubuntu/backend-flo_0.15.1.1-satoshilabs-1_amd64.deb \
+#     https://github.com/ranchimall/blockbook/releases/download/flo-v0.4.0-ubuntu/blockbook-flo_0.4.0_amd64.deb
 
-# Expose the port for the Blockbook web interface
-EXPOSE 9166
+# Create run flo directory
+# RUN mkdir -p /run/flo
 
-# Start the Blockbook service
-#CMD ["/usr/local/bin/blockbook", "--config", "/etc/blockbook/blockbook-flo.cfg"]
-#CMD ["/opt/coins/nodes/flo/bin/flod -datadir=/opt/coins/data/flo/backend -conf=/opt/coins/nodes/flo/flo.conf -pid=/run/flo/flo.pid"]
+# # Create a common group (e.g., flo-group) and set permissions
+# RUN groupadd flo-group && \
+#     usermod -aG flo-group flo && \
+#     usermod -aG flo-group blockbook-flo && \
+#     chown :flo-group /run/flo && \
+#     chmod 777 /run/flo
 
-EXPOSE 22 80
-CMD ["/usr/bin/supervisord"]
+# Setting up supervisor configurations (Uncomment and add your configuration files)
+COPY alt-helper.sh /
+# COPY blockbook-flo.conf /etc/supervisor/conf.d/
+# COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Create log files
+# RUN touch /var/log/backend-flo-error.log && \
+#     touch /var/log/backend-flo.log && \
+#     touch /var/log/blockbook-flo-error.log && \
+#     touch /var/log/blockbook-flo.log
+
+# Expose ports
+EXPOSE 22 80 9166
+
+# Start supervisord (Uncomment this line)
+# CMD ["/usr/bin/supervisord"]
+
+# Start your applications (Uncomment and replace with your application start commands)
+#CMD ["/usr/bin/bash", "/alt-helper.sh"]

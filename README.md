@@ -1,5 +1,15 @@
 # Blockbook docker
 
+## Pre-requisites
+Should have [sysbox installed on your machine](https://github.com/nestybox/sysbox/blob/master/docs/developers-guide/build.md)
+
+## Main commands
+```
+sudo docker run -d --runtime=sysbox-runc -P -p <hostport>:9166 -n blockbook  ranchimallfze/blockbook:1.0.0
+```
+
+## Testing  
+
 The code and steps required to run Docker version of Blockbook block explorer
 
 ```
@@ -16,4 +26,10 @@ docker buildx rm insecure-builder
 
 
 sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -ti ubuntu:20.04
+```
+
+```
+sudo docker run -d --runtime=sysbox-runc -P -p 9167:9166 5018bee64419
+
+sudo docker run -d --runtime=sysbox-runc --net=host -P 5018bee64419
 ```

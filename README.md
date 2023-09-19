@@ -5,7 +5,7 @@ Should have [sysbox installed on your machine](https://github.com/nestybox/sysbo
 
 ## Main commands
 ```
-sudo docker run -d --runtime=sysbox-runc -P -p <hostport>:9166 -n blockbook  ranchimallfze/blockbook:1.0.0
+sudo docker run -d --runtime=sysbox-runc -P -p <hostport>:9166 --name blockbook ranchimallfze/blockbook:1.0.0
 ```
 
 ## Testing  

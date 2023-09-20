@@ -57,7 +57,8 @@ sudo docker --version
 
    ```
 
-   docker build -t <IMG_NAME> .   <!--If the directory of the dockerfile and the present directory is same-->
+   docker build -t <IMG_NAME> .   
+   <!--If the directory of the dockerfile and the present directory is same-->
    docker build -f <PATH_TO_DOCKERFILE> -t <IMG_NAME> <DOCKERFILE DIRECTORY> 
    <!--If the directory of the dockerfile and the present directory is not same-->
 
@@ -117,7 +118,7 @@ sudo docker run -d --runtime=sysbox-runc --net=host -P 5018bee64419
    image. In this case, it starts the systemd initialization process.
 
 
-   ### Why Sysbox Is Used ?
+   ## Why Sysbox Is Used ?
 
  + When you run Docker containers inside a Docker container (DinD), the inner containers typically share    
    the same Docker daemon as the host and other containers. This can lead to security and isolation concerns.

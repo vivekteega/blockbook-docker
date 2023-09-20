@@ -52,7 +52,7 @@ sudo docker --version
 
 ## Running Manually
 
-1. After the installation of docker and sysbox run the dockerfile.
++  After the installation of docker and sysbox run the dockerfile.
    For running first we build its docker-image by the following command:
 
    ```
@@ -63,7 +63,7 @@ sudo docker --version
 
    ```
         
-2. After building the docker-image use the following command to run it.
++  After building the docker-image use the following command to run it.
    ```
 
    docker run -d --privileged -p <CONTAINER_PORT>:<HOST_PORT> --name <CONTAINER_NAME> <IMG_NAME>
@@ -72,7 +72,7 @@ sudo docker --version
 
    ```
 
-3. Now access the blockbook by opening the following LINK: https://localhost:<HOST_PORT>/
++  Now access the blockbook by opening the following LINK: https://localhost:<HOST_PORT>/
    Use xdg-open https://localhost:<HOST_PORT>/ to open the link through the terminal and can view the interface of Blockbook.
 
 
@@ -104,23 +104,23 @@ sudo docker run -d --runtime=sysbox-runc --net=host -P 5018bee64419
 
  ## Code Explanation
 
- . We use the base image "nestybox/ubuntu-focal-systemd-docker," which is an Ubuntu-based image with 
+ + We use the base image "nestybox/ubuntu-focal-systemd-docker," which is an Ubuntu-based image with 
    systemd for managing system services.
- . We update the package list and installs necessary packages like wget, gnupg2,software-properties-common, 
+ + We update the package list and installs necessary packages like wget, gnupg2,software-properties-common, 
    and unzip.
- . The Dockerfile downloads a ZIP archive containing Debian (.deb) files from a GitHub repository and
+ + The Dockerfile downloads a ZIP archive containing Debian (.deb) files from a GitHub repository and
    extracts them.
- . Within the extracted directory, it installs two Debian packages ("dind_backend-flo_0.15.1.1-satoshilabs 
+ + Within the extracted directory, it installs two Debian packages ("dind_backend-flo_0.15.1.1-satoshilabs 
    -1_amd64.deb" and "dind_blockbook-flo_0.4.0_amd64.deb") using apt .
- . It exposes three ports (22, 80, and 9166) for potential network access.
- . The CMD instruction specifies the default command to run when a container is started based on this 
+ + It exposes three ports (22, 80, and 9166) for potential network access.
+ + The CMD instruction specifies the default command to run when a container is started based on this 
    image. In this case, it starts the systemd initialization process.
 
 
    ### Why Sysbox Is Used ?
 
- . When you run Docker containers inside a Docker container (DinD), the inner containers typically share    
+ + When you run Docker containers inside a Docker container (DinD), the inner containers typically share    
    the same Docker daemon as the host and other containers. This can lead to security and isolation concerns.
- . Sysbox allows you to run containers within an isolated environment, providing stronger separation 
+ + Sysbox allows you to run containers within an isolated environment, providing stronger separation 
    between inner containers, the host, and other outer containers. This is achieved by creating separate container runtimes for each inner container using runc (the OCI runtime).      
- . In our dockerfile we are able to execute systemctl command by using sysbox.
+ + In our dockerfile we are able to execute systemctl command by using sysbox.

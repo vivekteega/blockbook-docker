@@ -26,10 +26,12 @@ For Uninstalling:
 Installation of Docker:
 1. $ sudo apt update
 2. $ sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
-3. $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-4. $ echo "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu 
-   focal stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 
-   (Replace focal with your Ubuntu version (e.g., bionic, xenial, or hirsute) if you are using a different version)
+3. $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/   
+     docker-archive-keyring.gpg
+4. $ echo "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/
+     ubuntu 
+     focal stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 
+     (Replace focal with your Ubuntu version (e.g., bionic, xenial, or hirsute) if you are using a different version)
 5. $ sudo apt update
 6. $ sudo apt install -y docker-ce docker-ce-cli containerd.io
 7. $ sudo systemctl start docker

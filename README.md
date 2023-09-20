@@ -10,7 +10,7 @@ sudo docker run -d --runtime=sysbox-runc -P -p <hostport>:9166 --name blockbook 
 
 ## Requirements
 
-Installation of Sysbox:
+### Installation of Sysbox:
 ```
 
 git clone --recursive https://github.com/nestybox/sysbox.git
@@ -23,7 +23,7 @@ sudo ./docker-cfg --sysbox-runtime=enable (For this step go to the scr directory
 
  ```
 
-For Uninstalling:
+### For Uninstalling:
 ```
 
 sudo make uninstall
@@ -31,7 +31,7 @@ make clean
 
  ```
 
-Installation of Docker:
+### Installation of Docker:
 ```
 
 sudo apt update

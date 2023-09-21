@@ -69,7 +69,7 @@ sudo docker --version
 
    docker run -d --privileged -p <HOST_PORT>:<CONTAINER_PORT> --name <CONTAINER_NAME> <IMG_NAME>
    <!--The container port for our docker file is 9166.-->
-   docker run -d --privileged -p 9166:<HOST_PORT> --name <CONTAINER_NAME> <IMG_NAME>
+   docker run -d --privileged -p <HOST_PORT>:9166 --name <CONTAINER_NAME> <IMG_NAME>
 
    ```
 

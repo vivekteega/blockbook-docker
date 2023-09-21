@@ -67,7 +67,7 @@ sudo docker --version
 +  After building the docker-image use the following command to run it.
    ```
 
-   docker run -d --privileged -p <CONTAINER_PORT>:<HOST_PORT> --name <CONTAINER_NAME> <IMG_NAME>
+   docker run -d --privileged -p <HOST_PORT>:<CONTAINER_PORT> --name <CONTAINER_NAME> <IMG_NAME>
    <!--The container port for our docker file is 9166.-->
    docker run -d --privileged -p 9166:<HOST_PORT> --name <CONTAINER_NAME> <IMG_NAME>
 

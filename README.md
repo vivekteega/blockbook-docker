@@ -50,6 +50,27 @@ sudo docker --version
 
 ```
 
+## How to see availble ports ?
+
++  Open a new terminal on your Ubuntu system and copy the code given below:
+``` 
+
+  # Specify the range of ports you want to check (e.g., 8000 to 9000)
+  start_port=8000
+  end_port=9000
+
+  # Use a loop to check each port in the specified range
+  for port in $(seq "$start_port" "$end_port"); do
+    # Use netstat or ss to check if the port is in use
+    if ! ss -tuln | grep -q ":$port\b"; then
+      echo "Port $port is available"
+    fi
+  done
+
+  ```
+
+
+
 ## Running Manually
 
 +  After the installation of docker and sysbox run the dockerfile.

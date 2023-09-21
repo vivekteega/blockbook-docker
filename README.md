@@ -1,14 +1,17 @@
 # Blockbook docker
 
 
-## Video-Demonstration
+## Video-Demonstration For Mainnet
 + https://drive.google.com/file/d/1MQlndJi1w992uhUtGTbf89uq0Q7mZR6k/view?usp=sharing (Only Text)
 + https://www.youtube.com/watch?v=QKd3EriMPx0 (Both Text And Audio)
+
+## Video-Demonstration For Testnet
+
 
 ## Pre-requisites
 Should have [sysbox installed on your machine](https://github.com/nestybox/sysbox/blob/master/docs/developers-guide/build.md)
 
-## Main commands
+## Main commands (For Both Mainnet and Testnet)
 ```
 sudo docker run -d --runtime=sysbox-runc -P -p <hostport>:9166 --name blockbook ranchimallfze/blockbook:1.0.0
 ```
@@ -76,7 +79,7 @@ sudo docker --version
 
 
 
-## Running Manually
+## Running Manually For Both Mainnet And Testnet
 
 +  After the installation of docker and sysbox run the dockerfile.
    For running first we build its docker-image by the following command:
@@ -129,7 +132,7 @@ sudo docker run -d --runtime=sysbox-runc -P -p 9167:9166 5018bee64419
 sudo docker run -d --runtime=sysbox-runc --net=host -P 5018bee64419
 ```
 
- ## Code Explanation
+ ## Code Explanation For Mainnet
 
  + We use the base image "nestybox/ubuntu-focal-systemd-docker," which is an Ubuntu-based image with 
    systemd for managing system services.
@@ -142,6 +145,27 @@ sudo docker run -d --runtime=sysbox-runc --net=host -P 5018bee64419
  + It exposes three ports (22, 80, and 9166) for potential network access.
  + The CMD instruction specifies the default command to run when a container is started based on this 
    image. In this case, it starts the systemd initialization process.
+
+
+ ## Code Explanation For Testnet
+
+  + This line specifies the base image for the Docker container. It starts with a base image called nestybox/ubuntu-focal-systemd-docker, 
+    which includes Ubuntu Focal Fossa (20.04) with systemd support.
+  + We run a shell command inside the container during the image-building process. It updates the package list by executing apt 
+    update. The && operator is used to chain multiple commands in a single line.
+  + We define an argument named TESTNET with a default value of false. Docker ARGs can be used to pass values at build time, and 
+    in this case, it's determining whether to set up the testnet or the mainnet environment.
+  + Inside the if block, this line downloads a ZIP file containing testnet-related files from a GitHub repository using wget and 
+    then unzips it using unzip.
+  + If the value of TESTNET is not "true," the else block is executed.Inside the else block, similar to the if block, we download
+    a different ZIP file (likely containing mainnet-related files) and unzip it.
+  + We change the working directory to the one where the mainnet ZIP file was extracted (blockbook-docker-main) and install the 
+    same two Debian packages as in the if block.
+  + Use of 'fi' marks the end of the conditional statement, closing the if-else block.
+  + Now we expose the ports 22, 80, and 9166 and make them accessible for communication with the host system or other containers.
+  + The CMD instruction specifies the default command to run when a container is started based on this 
+    image. In this case, it starts the systemd initialization process.
+
 
 
    ## Why Sysbox Is Used ?

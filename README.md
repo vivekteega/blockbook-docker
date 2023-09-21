@@ -50,7 +50,7 @@ sudo docker --version
 
 ```
 
-## How to see availble ports ?
+## How to see available ports ?
 
 +  Open a new terminal on your Ubuntu system and copy the code given below:
 ``` 

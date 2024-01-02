@@ -1,5 +1,8 @@
+#!/bin/bash
+echo "Running bootstrap images"
+
 ## Download the Blockchain Bootstrap if set
-if [ ! -z "$BLOCKCHAIN_BOOTSTRAP" ]
+if [ ! -z "$BLOCKCHAIN_BOOTSTRAP" ] && [ "$(cat /opt/coins/data/flo/backend/bootstrap-url.txt)" != "$BLOCKCHAIN_BOOTSTRAP" ]
 then
   # download and extract a Blockchain boostrap
   echo 'Downloading Blockchain Bootstrap...'
@@ -15,7 +18,9 @@ then
   rm -f /opt/coins/data/flo/backend/flosight-bootstrap.tar.gz
   echo 'Erased Blockchain Bootstrap `.tar.gz` file'
   echo "$BLOCKCHAIN_BOOTSTRAP" > /opt/coins/data/flo/backend/bootstrap-url.txt
-  ls /data
+  ls /opt/coins/data/flo/backend/bootstrap-url.txt
+else
+  echo "BLOCKCHAIN_BOOTSTRAP variable not present"
 fi
 
 ## Set file persmissions for the bootstrap
@@ -24,4 +29,4 @@ chmod -R 755 /opt/coins/data/flo/backend/
 
 ## Start systemd services
 systemctl start backend-flo.service 
-systemctl start blockbook-flo.service
+systemctl start blockbook-flo.service 

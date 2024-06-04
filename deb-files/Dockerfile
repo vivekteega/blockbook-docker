@@ -16,7 +16,7 @@ COPY dind_backend-flo_0.15.1.1-satoshilabs-1_amd64.deb /tmp/backend-flo.deb
 RUN apt-get update && \
     apt-get install -y /tmp/backend-flo.deb && \
     rm /tmp/backend-flo.deb
-    
+
 # Expose the RPC port for the backend
 EXPOSE 8066
 
@@ -36,11 +36,12 @@ EXPOSE 9066
 #COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Declare volumes for persistence
-VOLUME /
+VOLUME /opt/coins
 
 # Start the service and keep the container running by tailing the log file
-CMD /bin/bash -c "/opt/coins/nodes/flo/bin/flod -datadir=/opt/coins/data/flo/backend -conf=/opt/coins/nodes/flo/flo.conf -pid=/run/flo/flo.pid && tail -f /opt/coins/data/flo/backend/debug.log && /opt/coins/blockbook/flo/bin/blockbook -blockchaincfg=/opt/coins/blockbook/flo/config/blockchaincfg.json -datadir=/opt/coins/data/flo/blockbook/db -sync -internal=:9066 -public=:9166 -certfile=/opt/coins/blockbook/flo/cert/blockbook -explorer= -log_dir=/opt/coins/blockbook/flo/logs -dbcache=1073741824"
+#CMD /bin/bash -c "/opt/coins/nodes/flo/bin/flod -datadir=/opt/coins/data/flo/backend -conf=/opt/coins/nodes/flo/flo.conf -pid=/run/flo/flo.pid && tail -f /opt/coins/data/flo/backend/debug.log && /opt/coins/blockbook/flo/bin/blockbook -blockchaincfg=/opt/coins/blockbook/flo/config/blockchaincfg.json -datadir=/opt/coins/data/flo/blockbook/db -sync -internal=:9066 -public=:9166 -certfile=/opt/coins/blockbook/flo/cert/blockbook -explorer= -log_dir=/opt/coins/blockbook/flo/logs -dbcache=1073741824"
 
+CMD ["tail", "-f", "/dev/null"]
 # Start supervisor
 #CMD ["/usr/bin/supervisord"]
 

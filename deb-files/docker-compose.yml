@@ -16,7 +16,7 @@ services:
       dockerfile: Dockerfile.blockbook
     ports:
       - "9166:9166"
-      - "9066:9066"
+      - "9066:9066"  
     depends_on:
       - backend
     environment:

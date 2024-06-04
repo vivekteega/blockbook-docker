@@ -20,5 +20,6 @@ RUN apt-get update && \
 EXPOSE 8066
 
 # Start the service and keep the container running by tailing the log file
-CMD ["/bin/bash", "-c", "/opt/coins/nodes/flo/bin/flod -datadir=/opt/coins/data/flo/backend -conf=/opt/coins/nodes/flo/flo.conf -pid=/run/flo/flo.pid & tail -f /opt/coins/data/flo/backend/debug.log"]
-
+#CMD ["/bin/bash", "-c", "/opt/coins/nodes/flo/bin/flod -datadir=/opt/coins/data/flo/backend -conf=/opt/coins/nodes/flo/flo.conf -pid=/run/flo/flo.pid"]
+# & tail -f /opt/coins/data/flo/backend/debug.log
+CMD ["tail", "-f", "/dev/null"]

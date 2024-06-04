@@ -20,7 +20,9 @@ RUN apt-get update && \
 EXPOSE 9166
 EXPOSE 9066
 
-# Start the service and keep the container running by tailing the log file
-CMD ["/bin/bash", "-c", "/opt/coins/blockbook/flo/bin/blockbook -blockchaincfg=/opt/coins/blockbook/flo/config/blockchaincfg.json -datadir=/opt/coins/data/flo/blockbook/db -sync -internal=:9066 -public=:9166 -certfile=/opt/coins/blockbook/flo/cert/blockbook -explorer= -log_dir=/opt/coins/blockbook/flo/logs -dbcache=1073741824 & tail -f /opt/coins/blockbook/flo/logs/blockbook.INFO"]
+VOLUME /opt/coins
 
+# Start the service and keep the container running by tailing the log file
+#CMD ["/bin/bash", "-c", "/opt/coins/blockbook/flo/bin/blockbook -blockchaincfg=/opt/coins/blockbook/flo/config/blockchaincfg.json -datadir=/opt/coins/data/flo/blockbook/db -sync -internal=:9066 -public=:9166 -certfile=/opt/coins/blockbook/flo/cert/blockbook -explorer= -log_dir=/opt/coins/blockbook/flo/logs -dbcache=1073741824 & tail -f /opt/coins/blockbook/flo/logs/blockbook.INFO"]
+CMD ["tail", "-f", "/dev/null"]
 

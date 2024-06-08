@@ -1,0 +1,8 @@
+FROM ubuntu:22.04
+
+COPY ./deb-files/blockbook-flo_0.4.0_amd64.deb /opt/blockbook.deb
+
+RUN apt update && apt install -y /opt/blockbook.deb
+WORKDIR /opt/coins/blockbook/flo
+
+ENTRYPOINT ["/opt/coins/blockbook/flo/bin/blockbook", "-blockchaincfg=/opt/coins/blockbook/flo/config/blockchaincfg.json", "-datadir=/opt/coins/data/flo/blockbook/db", "-sync", "-internal=:9066", "-public=:9166", "-certfile=/opt/coins/blockbook/flo/cert/blockbook", "-explorer=", "-log_dir=/opt/coins/blockbook/flo/logs", "-dbcache=1073741824"]

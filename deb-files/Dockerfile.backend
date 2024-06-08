@@ -1,0 +1,25 @@
+# Use the official Ubuntu 22.04 as the base image
+FROM ubuntu:22.04
+
+# Set the DEBIAN_FRONTEND environment variable to noninteractive to avoid prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update the package list and clean up the apt cache to reduce image size
+RUN apt-get update && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy the .deb package for backend-flo into the container
+COPY dind_backend-flo_0.15.1.1-satoshilabs-1_amd64.deb /tmp/backend-flo.deb
+
+# Update the package list, install the .deb package, and remove the .deb file to reduce image size
+RUN apt-get update && \
+    apt-get install -y /tmp/backend-flo.deb && \
+    rm /tmp/backend-flo.deb
+
+# Expose the RPC port for the backend
+EXPOSE 8066
+
+# Start the service and keep the container running by tailing the log file
+#CMD ["/bin/bash", "-c", "/opt/coins/nodes/flo/bin/flod -datadir=/opt/coins/data/flo/backend -conf=/opt/coins/nodes/flo/flo.conf -pid=/run/flo/flo.pid"]
+# & tail -f /opt/coins/data/flo/backend/debug.log
+CMD ["tail", "-f", "/dev/null"]

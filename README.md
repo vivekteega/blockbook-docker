@@ -15,17 +15,20 @@ docker build -f Dockerfile -t vivekteega/blockbook:1.0.0 .
 
 docker volume create blockbook
 
-# Run backend in "it" mode
-docker run -it --mount source=blockbook,target=/opt -p 38366:38366 -p 8066:8066 vivekteega/blockbook:1.0.0 backend
+docker network create blockbook
 
-# Run backend in daemon mode
-docker run -d --mount source=blockbook,target=/ -p 38366:38366 -p 8066:8066 vivekteega/blockbook:1.0.0 backend
+# Run backend in "it" mode for testing
+docker run -it --name blockbook-backend --mount source=blockbook,target=/opt -p 38366:38366 -p 8066:8066 --network=blockbook vivekteega/blockbook:1.0.0 backend
 
-# Run frontend in "it" mode
-docker run -it --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 vivekteega/blockbook:1.0.0 frontend
+# Run backend in daemon mode for production
+docker run -d --name blockbook-backend --mount source=blockbook,target=/opt -p 38366:38366 -p 8066:8066 --network=blockbook vivekteega/blockbook:1.0.0 backend
 
-# Run frontend in it mode
-docker run -d --mount source=blockbook,target=/ -p 9166:9166 -p 9066:9066 vivekteega/blockbook:1.0.0 frontend
+
+# Run frontend in "it" mode for testing
+docker run -it --name blockbook-frontend --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 --network=blockbook vivekteega/blockbook:1.0.0 frontend 172.20.0.2
+
+# Run frontend in daemon mode for production
+docker run -d --name blockbook-frontend --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 --network=blockbook vivekteega/blockbook:1.0.0 frontend 172.20.0.2
 ```
 
 ## Building & running backend image
@@ -38,14 +41,4 @@ docker volume create blockbook
 docker run -it --mount source=blockbook,target=/opt/coins -p vivekteega/blockbook-backend:1.0.
 
 docker run -d --mount source=blockbook,target=/opt/coins -p 38366:38366 -p 8066:8066 vivekteega/blockbook-backend:1.0.0
-```
-
-## Building & running frontend image
-
-```
-docker build -t vivekteega/blockbook-frontend:1.0.0 -f Dockerfile_frontend .
-
-docker run -it --mount source=blockbook,target=/opt/coins -p 9166:9166 -p 9066:9066 vivekteega/blockbook-frontend:1.0.0
-
-docker run -d --mount source=blockbook,target=/opt/coins -p 9166:9166 -p 9066:9066 vivekteega/blockbook-frontend:1.0.0
 ```

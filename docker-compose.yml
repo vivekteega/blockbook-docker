@@ -14,8 +14,8 @@ services:
       - "${BACKEND_PORT_2}:8066"
     command: backend
     environment:
-      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-mainnet-backend.tar.gz
-      - BOOTSTRAP_URL=${BOOTSTRAP_URL:-}  # Set to empty string if not provided
+      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-mainnet-backend.tar.gz  # Set to empty string if not provided
+      - BOOTSTRAP_URL=${BACKEND_BOOTSTRAP_URL:-}  # Set to empty string if not provided
 
   blockbook-frontend:
     image: ${FRONTEND_IMAGE}
@@ -34,8 +34,8 @@ services:
     command: >
       "/opt/entrypoint.sh frontend $(getent hosts blockbook-backend | awk '{ print $1 }')"
     environment:
-      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-mainnet-frontend.tar.gz
-      - BOOTSTRAP_URL=${BOOTSTRAP_URL:-}  # Set to empty string if not provided
+      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-mainnet-frontend.tar.gz  # Set to empty string if not provided
+      - BOOTSTRAP_URL=${FRONTEND_BOOTSTRAP_URL:-}  # Set to empty string if not provided
 
 volumes:
   blockbook:

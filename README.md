@@ -2,20 +2,22 @@
 
 ## Roadmap for upgrade
 
--  [X] [Unable to build frontend separately since having backend package installed is a dependency] Create separate images for both backend and blockbook.
--  [X] Attach the same volume to both the running containers of the images.
--  [ ] Think of how Blockbook container will detect the spots of backend container
--  [ ] Figure out if multiple volume path need to be mounted
--  [ ] See if creating a new network for both the containers will be a good option. 
+- [ ] How to set this up in production
+- [ ] Think of how Blockbook container will detect the status of backend container
+- [ ] Figure out if multiple volume path need to be mounted
+- [ ] See if creating a new network for both the containers will be a good option.
+- [X] [Unable to build frontend separately since having backend package installed is a dependency] Create separate images for both backend and blockbook.
+- [X] Attach the same volume to both the running containers of the images.
 
 ## Quickstart
-To run the services using this file, run the following command in the same directory:
+
+To run the services using this file create a .env file using .env.example file, fill info and run the following command in the same directory:
 
 ```
 sudo docker-compose up -d
 ```
 
-## Building and running blockbook image
+## Running blockbook manually
 
 ```
 
@@ -42,16 +44,4 @@ docker run -d --name blockbook-frontend --mount source=blockbook,target=/opt -p 
 # Bootstrap
 docker run -d --name blockbook-frontend --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 --network=blockbook --env BOOTSTRAP_URL=https://bootstrap.ranchimall.net/blockbook-flo-frontend.tar.gz vivekteega/blockbook:1.0.0 frontend 172.20.0.2
 
-```
-
-## Building & running backend image
-
-```
-docker build -t vivekteega/blockbook-backend:1.0.0 -f Dockerfile_backend .
-
-docker volume create blockbook
-
-docker run -it --mount source=blockbook,target=/opt/coins -p vivekteega/blockbook-backend:1.0.
-
-docker run -d --mount source=blockbook,target=/opt/coins -p 38366:38366 -p 8066:8066 vivekteega/blockbook-backend:1.0.0
 ```

@@ -1,0 +1,18 @@
+sudo docker volume create blockbook
+
+sudo docker network create blockbook
+
+# Run backend in daemon mode for production
+docker run -d --name blockbook-backend --mount source=blockbook,target=/opt -p 38366:38366 -p 8066:8066 --network=blockbook vivekteega/blockbook:1.0.0 backend
+
+# Run backend in daemon mode for production with Bootstrap
+docker run -d --name blockbook-backend --mount source=blockbook,target=/opt -p 38366:38366 -p 8066:8066 --network=blockbook --env BOOTSTRAP_URL=https://bootstrap.ranchimall.net/blockbook-flo-backend1.tar.gz vivekteega/blockbook:1.0.0 backend
+
+# Find the IP address of blockbook-backend container 
+ip_backend_container
+
+# Run frontend in daemon mode for production
+docker run -d --name blockbook-frontend --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 --network=blockbook vivekteega/blockbook:1.0.0 frontend $ip_backend_container
+
+# Run frontend in daemon mode for production with Bootstrap
+docker run -d --name blockbook-frontend --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 --network=blockbook --env BOOTSTRAP_URL=https://bootstrap.ranchimall.net/blockbook-flo-frontend.tar.gz vivekteega/blockbook:1.0.0 frontend $ip_backend_container

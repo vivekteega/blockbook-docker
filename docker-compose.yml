@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  blockbook-backend:
+    image: ${BACKEND_IMAGE}
+    container_name: ${BACKEND_CONTAINER_NAME}
+    networks:
+      - blockbook
+    volumes:
+      - blockbook:/opt
+      - ${BACKEND_BOOTSTRAP_FILE:-/dev/null}:/local-bootstrap/bootstrap-blockbook-flo-mainnet-backend.tar.gz  # Use /dev/null if no file
+    ports:
+      - "${BACKEND_PORT_1}:38366"
+      - "${BACKEND_PORT_2}:8066"
+    command: backend
+    environment:
+      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-mainnet-backend.tar.gz
+      - BOOTSTRAP_URL=${BOOTSTRAP_URL:-}  # Set to empty string if not provided
+
+  blockbook-frontend:
+    image: ${FRONTEND_IMAGE}
+    container_name: ${FRONTEND_CONTAINER_NAME}
+    networks:
+      - blockbook
+    volumes:
+      - blockbook:/opt
+      - ${FRONTEND_BOOTSTRAP_FILE:-/dev/null}:/local-bootstrap/bootstrap-blockbook-flo-mainnet-frontend.tar.gz  # Use /dev/null if no file
+    ports:
+      - "${FRONTEND_PORT_1}:9166"
+      - "${FRONTEND_PORT_2}:9066"
+    depends_on:
+      - blockbook-backend
+    entrypoint: /bin/sh -c
+    command: >
+      "/opt/entrypoint.sh frontend $(getent hosts blockbook-backend | awk '{ print $1 }')"
+    environment:
+      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-mainnet-frontend.tar.gz
+      - BOOTSTRAP_URL=${BOOTSTRAP_URL:-}  # Set to empty string if not provided
+
+volumes:
+  blockbook:
+
+networks:
+  blockbook:
+    driver: bridge

@@ -6,6 +6,7 @@
 - [ ] Think of how Blockbook container will detect the status of backend container
 - [ ] Figure out if multiple volume path need to be mounted
 - [ ] See if creating a new network for both the containers will be a good option.
+---
 - [X] [Unable to build frontend separately since having backend package installed is a dependency] Create separate images for both backend and blockbook.
 - [X] Attach the same volume to both the running containers of the images.
 

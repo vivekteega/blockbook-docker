@@ -1,35 +1,48 @@
 # Blockbook docker
 
-## Pre-requisites
-Should have [sysbox installed on your machine](https://github.com/nestybox/sysbox/blob/master/docs/developers-guide/build.md)
+## Roadmap for upgrade
 
-## Main commands
-```
-sudo docker run -d --runtime=sysbox-runc -P -p <hostport>:9166 --name blockbook ranchimallfze/blockbook:1.0.0
-```
+- [ ] How to set this up in production
+- [ ] Think of how Blockbook container will detect the status of backend container
+- [ ] Figure out if multiple volume path need to be mounted
+- [ ] See if creating a new network for both the containers will be a good option.
+---
+- [X] [Unable to build frontend separately since having backend package installed is a dependency] Create separate images for both backend and blockbook.
+- [X] Attach the same volume to both the running containers of the images.
 
-## Testing  
+## Quickstart
 
-The code and steps required to run Docker version of Blockbook block explorer
-
-```
-sudo docker build -t blockbook-althelper -f Dockerfile-althelper .
-sudo docker run -d --privileged -p 9166:9166 d5e56e218acd
-```
+To run the services using this file create a .env file using .env.example file, fill info and run the following command in the same directory:
 
 ```
-docker buildx create --driver-opt image=moby/buildkit:master --use --name insecure-builder --buildkitd-flags '--allow-insecure-entitlement security.insecure'
-docker buildx use insecure-builder
-docker buildx build --allow security.insecure ...(other build args)...
-sudo docker buildx build --allow security.insecure -t blockbook .
-docker buildx rm insecure-builder
-
-
-sudo docker run -v /var/run/docker.sock:/var/run/docker.sock -ti ubuntu:20.04
+sudo docker-compose up -d
 ```
 
-```
-sudo docker run -d --runtime=sysbox-runc -P -p 9167:9166 5018bee64419
+## Running blockbook manually
 
-sudo docker run -d --runtime=sysbox-runc --net=host -P 5018bee64419
+```
+
+docker volume create blockbook
+
+docker network create blockbook
+
+# Run backend in "it" mode for testing
+docker run -it --name blockbook-backend --mount source=blockbook,target=/opt -p 38366:38366 -p 8066:8066 --network=blockbook vivekteega/blockbook:1.0.0 backend
+
+# Run backend in daemon mode for production
+docker run -d --name blockbook-backend --mount source=blockbook,target=/opt -p 38366:38366 -p 8066:8066 --network=blockbook vivekteega/blockbook:1.0.0 backend
+
+# Run backend in daemon mode for production with Bootstrap
+docker run -d --name blockbook-backend --mount source=blockbook,target=/opt -p 38366:38366 -p 8066:8066 --network=blockbook --env BOOTSTRAP_URL=https://bootstrap.ranchimall.net/blockbook-flo-backend1.tar.gz vivekteega/blockbook:1.0.0 backend
+
+
+# Run frontend in "it" mode for testing
+docker run -it --name blockbook-frontend --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 --network=blockbook vivekteega/blockbook:1.0.0 frontend 172.20.0.2
+
+# Run frontend in daemon mode for production
+docker run -d --name blockbook-frontend --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 --network=blockbook vivekteega/blockbook:1.0.0 frontend 172.20.0.2
+
+# Bootstrap
+docker run -d --name blockbook-frontend --mount source=blockbook,target=/opt -p 9166:9166 -p 9066:9066 --network=blockbook --env BOOTSTRAP_URL=https://bootstrap.ranchimall.net/blockbook-flo-frontend.tar.gz vivekteega/blockbook:1.0.0 frontend 172.20.0.2
+
 ```
